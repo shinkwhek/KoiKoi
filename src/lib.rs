@@ -1,2 +1,2 @@
-mod board;
-mod fuda;
+pub mod board;
+pub mod fuda;

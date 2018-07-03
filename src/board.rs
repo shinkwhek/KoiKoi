@@ -1,12 +1,17 @@
+extern crate rand;
+use self::rand::Rng;
+use board::rand::prelude::*;
 use fuda::{Fuda, Gara, Month, TanColor};
 
+#[derive(Debug)]
 pub struct Board {
-    yama: Vec<Fuda>,      // 山札
-    ba: Vec<Fuda>,        // 場
-    te_oya: Vec<Fuda>,    // 手札 親
-    mochi_oya: Vec<Fuda>, // 獲得 親
-    te_ko: Vec<Fuda>,     // 手札 子
-    mochi_ko: Vec<Fuda>,  // 獲得 子
+    pub yama_count: usize,
+    pub yama: Vec<Fuda>,      // 山札
+    pub ba: Vec<Fuda>,        // 場
+    pub te_oya: Vec<Fuda>,    // 手札 親
+    pub mochi_oya: Vec<Fuda>, // 獲得 親
+    pub te_ko: Vec<Fuda>,     // 手札 子
+    pub mochi_ko: Vec<Fuda>,  // 獲得 子
 }
 
 macro_rules! set_yama {
@@ -18,8 +23,20 @@ macro_rules! set_yama {
     };
 }
 
+macro_rules! init_set {
+    ($i1:ident, $i2:ident) => {
+        for _ in 0..8 {
+            let r = rand::thread_rng().gen_range(0, $i1.yama_count);
+            let tmp = $i1.yama.remove(r);
+            $i1.yama_count -= 1;
+            $i1.$i2.push(tmp);
+        }
+    };
+}
+
 impl Board {
     pub fn new() -> Board {
+        let yama_count = 48;
         let mut yama = Vec::<Fuda>::new();
         set_yama!(
             yama,
@@ -118,13 +135,28 @@ impl Board {
             Gara::Kasu
         );
 
-        Board {
+        let mut tmp = Board {
+            yama_count: yama_count,
             yama: yama,
             ba: Vec::new(),
             te_oya: Vec::new(),
             mochi_oya: Vec::new(),
             te_ko: Vec::new(),
             mochi_ko: Vec::new(),
-        }
+        };
+
+        init_set!(tmp, ba);
+        init_set!(tmp, te_oya);
+        init_set!(tmp, te_ko);
+
+        tmp
     }
+}
+
+#[test]
+fn test_new() {
+    let bd = Board::new();
+    println!("a");
+    println!("{:?}", bd);
+    assert_eq!(true, true);
 }
