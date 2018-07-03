@@ -1,6 +1,5 @@
 extern crate rand;
 use self::rand::Rng;
-use board::rand::prelude::*;
 use fuda::{Fuda, Gara, Month, TanColor};
 
 #[derive(Debug)]
