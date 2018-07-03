@@ -33,6 +33,7 @@ pub enum Gara {
 pub enum TanColor {
     Aka, // Red
     Ao,  // Blue
+    Tan, // 凡
 }
 
 impl Fuda {
